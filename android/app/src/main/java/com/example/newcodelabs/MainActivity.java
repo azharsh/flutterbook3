@@ -1,4 +1,4 @@
-package com.example.book;
+package com.example.newcodelabs;
 
 import android.os.Bundle;
 import io.flutter.app.FlutterActivity;

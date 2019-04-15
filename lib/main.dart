@@ -1,77 +1,210 @@
 import 'package:flutter/material.dart';
+// import 'placholder.dart';
 
-class MyAppBar extends StatelessWidget {
-  MyAppBar({this.title});
+void main() => runApp(new MyApp());
 
-  // Fields in a Widget subclass are always marked "final".
-
-  final Widget title;
-
+class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 56.0, // in logical pixels
-      padding: const EdgeInsets.symmetric(horizontal: 8.0),
-      decoration: BoxDecoration(color: Colors.blue[500]),
-      // Row is a horizontal, linear layout.
-      child: Row(
-        // <Widget> is the type of items in the list.
-        children: <Widget>[
-          // IconButton(
-          //   icon: Icon(Icons.menu),
-          //   tooltip: 'Navigation menu',
-          //   onPressed: null, // null disables the button
-          // ),
-          // Expanded expands its child to fill the available space.
-          Expanded(
-            child: title,
-          ),
-          IconButton(
-            icon: Icon(Icons.search),
-            tooltip: 'Search',
-            onPressed: null,
-          ),
-        ],
+    return new MaterialApp(
+      title: 'Flutter Igrendients',
+      theme: new ThemeData(
+        primarySwatch: Colors.blue,
       ),
+        home:  new Home(),
     );
   }
 }
 
-class MyScaffold extends StatelessWidget {
+
+class Home extends StatefulWidget {
+ @override
+ State<StatefulWidget> createState() {
+    return HomeScreen();
+  }
+}
+class HomeScreen extends State<Home> {
+  int _currentIndex = 0;
+
+   final List<Widget> _children = [
+   PlaceholderWidget("assets/chiken.jpg"),
+   PlaceholderWidget("assets/sphageti.jpg"),
+   PlaceholderWidget("assets/fish.jpg")
+ ];
+
+
+
   @override
   Widget build(BuildContext context) {
-    // Material is a conceptual piece of paper on which the UI appears.
-    return Material(
-      // Column is a vertical, linear layout.
-      child: Column(
+    return new Scaffold(
+        appBar: new AppBar(
+        title: new Text("Main Menu"),
+      ),
+       body: _children[_currentIndex],
+       bottomNavigationBar: BottomNavigationBar(
+       onTap: onTabTapped, // new
+       currentIndex: _currentIndex, // this will be set when a new tab is tapped
+       items: [
+         BottomNavigationBarItem(
+           icon: new Icon(Icons.android),
+           title: new Text('Ciken'),
+         ),
+         BottomNavigationBarItem(
+           icon: new Icon(Icons.apps),
+           title: new Text('Spagety'),
+         ),
+         BottomNavigationBarItem(
+           icon: Icon(Icons.cloud_circle),
+           title: Text('Fish n Chips')
+         )
+       ],
+     ),
+     
+       );
+  }
+
+void onTabTapped(int index) {
+   setState(() {
+     _currentIndex = index;
+           
+   });
+ }
+}
+
+
+class PlaceholderWidget extends StatelessWidget {
+ final String item;
+
+
+ PlaceholderWidget(this.item);
+ 
+
+ @override
+ Widget build(BuildContext context) {
+   return  Center(
+        child: CustomScrollView(
+        primary: false,
+        slivers: <Widget>[
+        SliverPadding(
+        padding: const EdgeInsets.all(20.0),
+        sliver: SliverGrid.count(
+        crossAxisSpacing: 10.0,
+        crossAxisCount: 2,
         children: <Widget>[
-          MyAppBar(
-            title: Text(
-              'Example title',
-              style: Theme.of(context).primaryTextTheme.title,
+        new Card(       
+             child: PhotoHero(
+             photo: item,
+             width: 300.0,
+             onTap: (){
+            final snackBar = SnackBar(
+            content: Text('check another menu'),
+            action: SnackBarAction(
+              label: 'Undo',
+              onPressed: () {},
+            ),
+          );
+               Scaffold.of(context).showSnackBar(snackBar);         
+               Navigator.push( context, MaterialPageRoute(builder: (context) => Detail(item)),
+              );
+             },
+           )                 
+         ) 
+                  ],
+                ),
+              ),
+            ],
+   
+          ),
+        );
+ }
+}
+
+
+
+
+class Detail extends StatelessWidget {
+  final String item;
+
+  Detail(this.item);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("Detail Recipe"),
+      ),
+      body: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+           PhotoHero(
+             photo: item,
+             width: 500.0,
+             
+           ),
+
+           Container(
+              padding: const EdgeInsets.only(left:8.0, top: 8.0),
+              child: Text(
+                '1. Preheat oven to 350 degrees F (175 degrees C). Coat a 7x11 inch baking dish with nonstick cooking spray. ',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 15.0,
+                ),
+              ),
+            ),
+             Container(
+              padding: const EdgeInsets.only(left:8.0, top: 8.0),
+              child: Text(
+                '2. Pound chicken breasts to 1/4 inch thickness.',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 15.0,
+                ),
+              ),
+            ),
+             Container(
+              padding: const EdgeInsets.only(left:8.0, top: 8.0),
+              child: Text(
+                '3. Sprinkle each piece of chicken on both sides with salt and pepper. Place 1 cheese slice and 1 ham slice on top of each breast. Roll up each breast, and secure with a toothpick. Place in baking dish, and sprinkle chicken evenly with bread crumbs.',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 15.0,
+                ),
+              ),
+            )
+
+
+          ])
+     
+    );
+  }
+}
+
+
+class PhotoHero extends StatelessWidget {
+  const PhotoHero({ Key key, this.photo, this.onTap, this.width }) : super(key: key);
+
+  final String photo;
+  final VoidCallback onTap;
+  final double width;
+
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: width,
+      child: Hero(
+        tag: photo,
+        child: Material(
+          color: Colors.transparent,
+          child: InkWell(
+            onTap: onTap,
+            child: Image.asset(
+              photo,
+              fit: BoxFit.contain,
             ),
           ),
-        Column(
-  children: <Widget>[
-    Text('Deliver features faster'),
-    Text('Craft beautiful UIs'),
-    Expanded(
-      child: FittedBox(
-        fit: BoxFit.contain, // otherwise the logo will be tiny
-        child: const FlutterLogo(),
-      ),
-    ),
-  ],
-)
-        ],
+        ),
       ),
     );
   }
 }
 
-void main() {
-  runApp(MaterialApp(
-    title: 'My app', // used by the OS task switcher
-    home: MyScaffold(),
-  ));
-}

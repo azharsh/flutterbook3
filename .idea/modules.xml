@@ -2,8 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/book.iml" filepath="$PROJECT_DIR$/book.iml" />
-      <module fileurl="file://$PROJECT_DIR$/book_android.iml" filepath="$PROJECT_DIR$/book_android.iml" />
+      <module fileurl="file://$PROJECT_DIR$/newcodelabs.iml" filepath="$PROJECT_DIR$/newcodelabs.iml" />
+      <module fileurl="file://$PROJECT_DIR$/newcodelabs_android.iml" filepath="$PROJECT_DIR$/newcodelabs_android.iml" />
     </modules>
   </component>
 </project>
